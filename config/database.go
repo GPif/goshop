@@ -7,15 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitDB(dsn string) (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+var DB *gorm.DB
+
+func InitDB(dsn string) {
+	var err error
+	DB, err = gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
-	if err := db.AutoMigrate(&model.Item{}); err != nil {
-		return nil, err
+	if err := DB.AutoMigrate(&model.Item{}); err != nil {
+		panic(err)
 	}
 
-	return db, nil
 }
