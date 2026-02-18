@@ -79,3 +79,63 @@ func TestAddToShoppingList_Multiple(t *testing.T) {
 		t.Errorf("expected 3 items, got %d", count)
 	}
 }
+
+func TestRemoveFromShoppingList(t *testing.T) {
+	db := setupTestDB(t)
+
+	err := AddToShoppingList(db, "Milk", "Bread", "Eggs")
+	if err != nil {
+		t.Fatalf("AddToShoppingList failed: %v", err)
+	}
+
+	err = RemoveFromShoppingList(db, 1)
+	if err != nil {
+		t.Fatalf("RemoveFromShoppingList failed: %v", err)
+	}
+
+	var count int64
+	db.Model(&model.Item{}).Count(&count)
+	if count != 2 {
+		t.Errorf("expected 2 items, got %d", count)
+	}
+}
+
+func TestRemoveFromShoppingList_NonExistent(t *testing.T) {
+	db := setupTestDB(t)
+
+	err := AddToShoppingList(db, "Milk", "Bread", "Eggs")
+	if err != nil {
+		t.Fatalf("AddToShoppingList failed: %v", err)
+	}
+
+	err = RemoveFromShoppingList(db, 4)
+	if err != nil {
+		t.Fatalf("RemoveFromShoppingList failed: %v", err)
+	}
+
+	var count int64
+	db.Model(&model.Item{}).Count(&count)
+	if count != 3 {
+		t.Errorf("expected 3 items, got %d", count)
+	}
+}
+
+func TestRemoveFromShoppingList_Multiple(t *testing.T) {
+	db := setupTestDB(t)
+
+	err := AddToShoppingList(db, "Milk", "Bread", "Eggs")
+	if err != nil {
+		t.Fatalf("AddToShoppingList failed: %v", err)
+	}
+
+	err = RemoveFromShoppingList(db, 1, 2)
+	if err != nil {
+		t.Fatalf("RemoveFromShoppingList failed: %v", err)
+	}
+
+	var count int64
+	db.Model(&model.Item{}).Count(&count)
+	if count != 1 {
+		t.Errorf("expected 1 item, got %d", count)
+	}
+}

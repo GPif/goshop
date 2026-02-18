@@ -4,6 +4,8 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"goshop/config"
+	"goshop/internal/repository"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -16,7 +18,9 @@ var rootCmd = &cobra.Command{
 	Long:  `A shopping list CLI`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) {},
+	Run: func(cmd *cobra.Command, args []string) {
+		repository.ViewShoppingList(config.DB)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
