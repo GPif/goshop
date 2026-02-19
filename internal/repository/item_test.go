@@ -139,3 +139,23 @@ func TestRemoveFromShoppingList_Multiple(t *testing.T) {
 		t.Errorf("expected 1 item, got %d", count)
 	}
 }
+
+func TestEditShoppingList(t *testing.T) {
+	db := setupTestDB(t)
+
+	err := AddToShoppingList(db, "Milk", "Bread", "Eggs")
+	if err != nil {
+		t.Fatalf("AddToShoppingList failed: %v", err)
+	}
+
+	err = EditShoppingList(db, 2, "Brioche")
+	if err != nil {
+		t.Fatalf("EditShoppingList failed: %v", err)
+	}
+
+	var item model.Item
+	db.Where("id = ?", 2).First(&item)
+	if item.Title != "Brioche" {
+		t.Errorf("expected item name to be 'Brioche', got '%s'", item.Title)
+	}
+}

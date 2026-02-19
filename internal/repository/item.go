@@ -48,3 +48,18 @@ func RemoveFromShoppingList(db *gorm.DB, ids ...int) error {
 	}
 	return nil
 }
+
+func EditShoppingList(db *gorm.DB, itemID int, newName string) error {
+	var item model.Item
+	res := db.Where("id = ?", itemID).First(&item)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	item.Title = newName
+	res = db.Save(&item)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}
