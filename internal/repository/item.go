@@ -63,3 +63,26 @@ func EditShoppingList(db *gorm.DB, itemID int, newName string) error {
 	}
 	return nil
 }
+
+func GetAllItems(db *gorm.DB) ([]model.Item, error) {
+	var items []model.Item
+	res := db.Find(&items)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return items, nil
+}
+
+func ToggleItem(db *gorm.DB, itemID int) error {
+	var item model.Item
+	res := db.Where("id = ?", itemID).First(&item)
+	if res.Error != nil {
+		return res.Error
+	}
+	item.Completed = !item.Completed
+	res = db.Save(&item)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}
