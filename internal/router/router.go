@@ -3,14 +3,14 @@ package router
 import (
 	"goshop/internal/handler"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func Setup() *gin.Engine {
 	r := gin.Default()
-	r.LoadHTMLGlob("templates/*")
 
-	r.GET("/", handler.Index)
+	r.Use(cors.Default())
 
 	items := r.Group("/items")
 	{
